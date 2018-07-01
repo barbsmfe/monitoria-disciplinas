@@ -1,8 +1,10 @@
 package test;
 
-import controller.AlunaController;
+import controller.PessoaController;
 import model.Aluna;
 import model.Experiencia;
+import model.Pessoa;
+import model.TipoPessoa;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,13 +20,13 @@ public class AlunaControllerTest {
     public static final String EMAIL = "andri@gmail.com";
     public static final String SENHA = "123";
 
-    private Aluna aluna;
-    private AlunaController alunaController;
+    private Pessoa pessoa;
+    private PessoaController alunaController;
 
     @Before
     public void setUp(){
 
-        alunaController = new AlunaController();
+        alunaController = new PessoaController();
 
         List<String> habilidades = new ArrayList<>();
 
@@ -44,27 +46,27 @@ public class AlunaControllerTest {
         List<Experiencia> experiencias = new ArrayList<>();
         experiencias.add(experiencia);
 
-        aluna = new Aluna(NOME, EMAIL, SENHA, habilidades, experiencias);
+        pessoa = new Aluna(NOME, EMAIL, SENHA, TipoPessoa.ALUNA.name(), habilidades, experiencias);
     }
 
     @Test
     public void cadastra_aluna_com_sucesso() throws Exception {
-        Aluna alunaCadastrada = alunaController.cadastrarAluna(aluna);
+        Pessoa alunaCadastrada = alunaController.cadastrarPessoa(pessoa);
 
-        assertThat(alunaCadastrada, is(aluna));
+        assertThat(alunaCadastrada, is(pessoa));
     }
 
     @Test
     public void aluna_cadastrada_deve_logar_com_sucesso() throws Exception {
-        alunaController.cadastrarAluna(aluna);
+        alunaController.cadastrarPessoa(pessoa);
 
-        assertTrue(alunaController.login(EMAIL, SENHA));
+        assertThat(alunaController.login(EMAIL, SENHA), is(pessoa));
     }
 
     @Test
     public void aluna_nao_cadastrada_nao_deve_conseguir_logar() throws Exception {
-        alunaController.cadastrarAluna(aluna);
+        alunaController.cadastrarPessoa(pessoa);
 
-        assertFalse(alunaController.login("invalido@gmail.com", "senha_invalida"));
+        assertNull(alunaController.login("invalido@gmail.com", "senha_invalida"));
     }
 }

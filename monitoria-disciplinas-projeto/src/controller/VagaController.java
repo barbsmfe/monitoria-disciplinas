@@ -1,6 +1,8 @@
 package controller;
 
 import model.Aluna;
+import model.Pessoa;
+import model.Professora;
 import model.Vaga;
 
 import java.util.ArrayList;
@@ -10,11 +12,15 @@ public class VagaController {
 
     private List<Vaga> vagas;
 
-    public Vaga cadastraVaga(Vaga vaga){
-        vagas = new ArrayList<>();
-        vagas.add(vaga);
+    public Vaga cadastraVaga(Vaga vaga, Pessoa pessoa){
+        if(pessoa instanceof Professora){
+            vagas = new ArrayList<>();
+            vagas.add(vaga);
 
-        return vaga;
+            return vaga;
+        }
+
+        return null;
     }
 
     public List<Vaga> buscaVaga(String palavra){
@@ -30,8 +36,10 @@ public class VagaController {
         return vagasQueContemApalavra;
     }
 
-    public List<Aluna> candidatar(Vaga vaga, Aluna aluna){
-        vaga.getCandidatas().add(aluna);
+    public List<Aluna> candidatar(Vaga vaga, Pessoa pessoa){
+        if(pessoa instanceof Aluna){
+            vaga.getCandidatas().add((Aluna) pessoa);
+        }
 
         return vaga.getCandidatas();
     }
